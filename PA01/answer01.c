@@ -144,6 +144,35 @@ int countNegative(int * array, int length)
 */
 int isIncreasing(int * array, int length)
 {
+    int index = 0;
     
-    return 0;
+    if(length <= 0)
+    {
+      return 0;
+    }
+    
+    elseif(length == 1)
+    {
+      return 1;
+    }
+    
+    else
+    {
+      
+      for(index=0;index<length;index++)
+      {
+	
+	if(array[index] < array[index+1])
+	{
+	  return 1;
+	}
+	
+	else
+	{
+	  return 0;
+	}
+      
+      }
+      
+    }
 }

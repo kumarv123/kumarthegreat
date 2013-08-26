@@ -45,7 +45,18 @@
 */
 int addElement(int * array, int length)
 {
-    return 0;
+    int sum = 0;
+    int index = 0;
+    if(length <= 0)
+    {
+      return 0;
+    }
+    
+    for(index=0;index<length;index++)
+    {
+      sum = sum + array[index];
+    }
+    return sum;
 }
 /*
  * =================================================================
@@ -71,7 +82,21 @@ int addElement(int * array, int length)
 */
 int countNegative(int * array, int length)
 {
-    return 0;
+    int count = 0;
+    int index = 0;
+    if(length <= 0)
+    {
+      return 0;
+    }
+    
+    for(index=0;index<length;index++)
+    {
+      if(array[index] < 0)
+      {
+	count = count +1;
+      }
+    }
+    return count;
 }
 /*
  * =================================================================
@@ -119,5 +144,6 @@ int countNegative(int * array, int length)
 */
 int isIncreasing(int * array, int length)
 {
+    
     return 0;
 }

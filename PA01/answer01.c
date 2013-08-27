@@ -146,28 +146,26 @@ int isIncreasing(int * array, int length)
 {
     int index = 0;
     int flag;
-    if(length <= 0)
+    if(length < 0)
     {
       return 0;
     }
-    if(length == 1)
+    if(length == 0 || length == 1)
     {
       return 1;
     }
     
-    for(index=0;index<length;index++)
+    for(index=0;index+1<length;index++)
     {
       if(array[index] < array[index+1])
       {
 	flag = 1;
       }
-      if(array[index] == array[index+1])
-      {
-	flag = 0;
-      }
+      
       else
       {
 	flag = 0;
+	return flag;
       }
     }
     return flag;

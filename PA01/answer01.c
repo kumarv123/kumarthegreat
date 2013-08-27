@@ -145,6 +145,7 @@ int countNegative(int * array, int length)
 int isIncreasing(int * array, int length)
 {
     int index = 0;
+    int flag;
     if(length <= 0)
     {
       return 0;
@@ -158,9 +159,16 @@ int isIncreasing(int * array, int length)
     {
       if(array[index] < array[index+1])
       {
-	return 1;
+	flag = 1;
       }
-      return 0;
+      if(array[index] == array[index+1])
+      {
+	flag = 0;
+      }
+      else
+      {
+	flag = 0;
+      }
     }
-    return 0;
+    return flag;
 }

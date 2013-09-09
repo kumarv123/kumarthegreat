@@ -178,7 +178,34 @@ void my_strncat(char * s1, const char * s2, int num)
 
 const char *my_strstr(const char * s1, const char * s2)
 {
-    return NULL;
+    int ind1 = 0;
+    int ind2 = 0;
+    int count = 0;
+    int len1 = my_strlen(s1);	
+    int len2 = my_strlen(s2);	
+    while(s2[ind2] != '\0')
+    {
+	for(ind1=0;ind1<len1;ind1++)
+	{
+	    if(s2[ind2] == s1[ind1])
+	    {
+                ind2++;
+                count++;
+            } 
+            else
+	    {
+                ind2 = 0;
+                count = 0;
+            }
+	    if(count == len2)
+            {
+                return s1+(ind1-(count-1));
+            }	
+	}
+	
+        return NULL;
+    }
+    return NULL;   
 }
 
 
@@ -211,7 +238,35 @@ const char *my_strstr(const char * s1, const char * s2)
  */
 void my_strinsert(char *s1, const char *s2, int pos)
 {
-  
+    int ind1 = 0;
+    int ind2 = 0;
+    int len1 = my_strlen(s1);
+    int len2 = my_strlen(s2);
+    
+while(s2[ind2] != '\0')
+{
+    if(pos >= len1)
+    {
+        my_strcat(s1,s2);
+    }
+    else
+    {
+        for(ind1=0;ind1<len1-pos;ind1++)
+        {
+       	    s1[len1-1+len2-ind1] = s1[len1-1-ind1];
+            
+        }
+        for(ind2=0;ind2<len2;ind2++)
+        {
+            s1[pos+ind2] = s2[ind2];
+	    
+        }
+        s1[len1+len2]='\0';
+    } 
+    return;
+   
+}
+
 }
 
 /**
@@ -249,6 +304,23 @@ void my_strinsert(char *s1, const char *s2, int pos)
  */
 void my_strdelete(char *s, int pos, int length)
 {
-  
+    int ind = 0;
+    int l = my_strlen(s);
+    if(length > (l-pos))
+    {
+        s[pos] = '\0';
+    } 
+    else
+    {
+        for(ind=0;ind<(l-(pos+length));ind++)
+	{
+	    s[pos+ind] = s[pos+length+ind];
+	}
+	s[l-length] = '\0';
+    }   
+       
+    return;
+    
+    
 }
 

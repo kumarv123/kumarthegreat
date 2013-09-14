@@ -135,41 +135,35 @@ int * readIntegers(const char * filename, int * numberOfIntegers)
 void swap(int *s1,int *s2)
 {
     int temp;
-    temp = *s1;
-    *s1 = *s2;
-    *s2 = temp;
+    temp = s1;
+    s1 = s2;
+    s2 = temp;
 }
 void sort(int * arr, int length)
 {
-    int pivot; 
-    int left ;
-    int right;
-    
-    pivot  = arr[length/2];
-    left = 0;
-    right = length-1;
-    
+    int pivot = arr[0]; 
+    int left = 0;
+    int right = length -1;
     if(length < 2)
     {
-	return;  
-    }    
-    
+	return;
+    }
     while(left < right)
     {
 	while(arr[left] < pivot)
 	{
-	    left++;
+	    left = left +1;
 	}
 	while(arr[right] > pivot)
 	{
-	    right--;
+	    right = right -1;
 	}
 	swap(&arr[left],&arr[right]);
-	sort(arr,left);
-	sort(arr[left+1],length-left-1);
 	
-    } 
-
+    }
+    sort(arr,left);
+    sort(&arr[left+1],length -left -1);
+   	
 }
 
 /**
@@ -216,9 +210,40 @@ void sort(int * arr, int length)
  * }
  * return -1;
  */
+
+int helper(int *arr,int low, int high, int key)
+{  
+    int mid;
+    mid = (low + high)/2;
+    if(low > high)
+    {
+	return -1;
+    }
+    if(arr[mid] == key)
+    {
+	return mid;
+    }
+    
+    else if(key<arr[mid])
+    {
+	high = mid -1;
+	return helper(arr,low,high,key);
+    }
+    
+    else //if(key>arr[mid])
+    {
+      low = mid +1;
+	return helper(arr,low,high,key);
+    }
+    //return -1;  
+}
 int search(int * arr, int length, int key)
 {
-    return -1;
+    
+    return helper(arr,0,length-1,key);
+    
 }
+    
+
 
 

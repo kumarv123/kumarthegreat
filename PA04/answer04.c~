@@ -130,14 +130,14 @@ void partIncHelp(int *arr, int ind, int value)
 }
 void partitionIncreasing(int value)
 {
-  printf("partitionIncreasing %d\n", value);
-  int *arr;
-  
-  arr = malloc(sizeof(int)*value);
-  partIncHelp(arr,0,value);
-  arr[0] = value;
-  printf("= %d\n",arr[0]);
-  free(arr);
+    printf("partitionIncreasing %d\n", value);
+    int *arr;
+    
+    arr = malloc(sizeof(int)*value);
+    partIncHelp(arr,0,value);
+    arr[0] = value;
+    printf("= %d\n",arr[0]);
+    free(arr);
 
 }
 
@@ -203,14 +203,13 @@ void partDecHelp(int *arr, int ind, int value)
 }
 void partitionDecreasing(int value)
 {
-  printf("partitionDecreasing %d\n", value);
-  int *arr;
-  
-  arr = malloc(sizeof(int)*value);
-  arr[0] = value;
-  printf("= %d\n",arr[0]);
-  partDecHelp(arr,0,value);
-  free(arr);
+    printf("partitionDecreasing %d\n", value);
+    int *arr;
+    arr = malloc(sizeof(int)*value);
+    arr[0] = value;
+    printf("= %d\n",arr[0]);
+    partDecHelp(arr,0,value);
+    free(arr);
 
 }
 
@@ -231,11 +230,17 @@ void partitionDecreasing(int value)
  * generates invalid partitions and checks validity before printing.
  */
 
-
+void partOddHelp(int *arr,int ind,int value)
 void partitionOdd(int value)
 {
-  printf("partitionOdd %d\n", value);
-  
+    printf("partitionOdd %d\n", value);
+    int *arr;
+    arr = malloc(sizeof(int)*value);
+    //arr[0] = value;
+    //printf("= %d\n",arr[0]);
+    partOddHelp(arr,0,value);
+    free(arr);
+
 }
 
 /*

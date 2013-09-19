@@ -111,12 +111,12 @@ void printIncreasing(int *arr,int length,int value)
 	printf("%d\n",arr[length-1]);
     }
 }
-void partIncHelp(int *arr, int ind, int value)
+void partIncHelp(int *arr, int ind)
 {
     int lcv;
     if(value <= 0)
     {
-	printIncreasing(arr,ind,value);
+	printIncreasing(arr,ind);
 	//printf("= %d\n",arr[ind-1] = value);
 	return;
     }
@@ -230,7 +230,24 @@ void partitionDecreasing(int value)
  * generates invalid partitions and checks validity before printing.
  */
 
+void printOdd()
 void partOddHelp(int *arr,int ind,int value)
+{
+    int lcv;
+    if(value <= 0)
+    {
+	printOdd(arr,ind);
+	return;
+    }
+    
+    for(lcv = 1;lcv <= value;lcv++)
+    {
+	arr[ind] = lcv;
+	partOddHelp(arr,ind+1,value-lcv);
+    }
+
+    
+}
 void partitionOdd(int value)
 {
     printf("partitionOdd %d\n", value);

@@ -86,46 +86,24 @@ void partitionAll(int value)
  *
  */
 
-void printIncreasing(int *arr,int length)
-{
-    int lcv;
-    int flag;
-    for(lcv=0;lcv+1<length;lcv++)
-    {
-	if(arr[lcv] < arr[lcv+1])
-	{
-	    flag = 1;
-	}
-	else
-	{
-	    return;
-	}
-    }
-    if(flag == 1)
-    {
-	printf("= ");
-	for(lcv = 0;lcv < length-1;lcv++)
-	{
-	    printf("%d + ",arr[lcv]);
-	}
-	printf("%d\n",arr[length-1]);
-    }
-}
 void partIncHelp(int *arr, int ind, int value)
 {
     int lcv;
     if(value <= 0)
     {
-	printIncreasing(arr,ind);
-	//printf("= %d\n",arr[ind-1] = value);
+	printPartition(arr,ind);
 	return;
     }
     
     for(lcv = 1;lcv <= value;lcv++)
     {
-	arr[ind] = lcv;
-	partIncHelp(arr,ind+1,value-lcv);
+	if((ind == 0) || (arr[ind-1] < lcv))
+	{
+	    arr[ind] = lcv;
+	    partIncHelp(arr,ind+1,value-lcv); 
+	}
     }
+    
     
 }
 void partitionIncreasing(int value)
@@ -135,8 +113,6 @@ void partitionIncreasing(int value)
     
     arr = malloc(sizeof(int)*value);
     partIncHelp(arr,0,value);
-    arr[0] = value;
-    printf("= %d\n",arr[0]);
     free(arr);
 
 }
@@ -160,44 +136,23 @@ void partitionIncreasing(int value)
  *
  */
 
-void printDecreasing(int *arr,int length)
-{
-    int lcv;
-    int flag;
-    for(lcv=0;lcv+1<length;lcv++)
-    {
-	if(arr[lcv] > arr[lcv+1])
-	{
-	    flag = 1;
-	}
-	else
-	{
-	    return;
-	}
-    }
-    if(flag == 1)
-    {
-	printf("= ");
-	for(lcv = 0;lcv < length-1;lcv++)
-	{
-	    printf("%d + ",arr[lcv]);
-	}
-	printf("%d\n",arr[length-1]);
-    }
-}
 void partDecHelp(int *arr, int ind, int value)
 {
     int lcv;
     if(value <= 0)
     {
-	printDecreasing(arr,ind);
+	printPartition(arr,ind);
 	return;
     }
     
-    for(lcv = 1;lcv <= value;lcv++)
+    
+    for(lcv = value;lcv > 0;lcv--)
     {
-	arr[ind] = lcv;
-	partDecHelp(arr,ind+1,value-lcv);
+	if((ind == 0) || (arr[ind-1] > lcv))
+	{
+	    arr[ind] = lcv;
+	    partDecHelp(arr,ind+1,value-lcv); 
+	}
     }
     
 }
@@ -206,8 +161,6 @@ void partitionDecreasing(int value)
     printf("partitionDecreasing %d\n", value);
     int *arr;
     arr = malloc(sizeof(int)*value);
-    arr[0] = value;
-    printf("= %d\n",arr[0]);
     partDecHelp(arr,0,value);
     free(arr);
 
@@ -230,47 +183,20 @@ void partitionDecreasing(int value)
  * generates invalid partitions and checks validity before printing.
  */
 
-void printOdd(int *arr,int length)
-{
-    int ind;
-    int flag;
-    for(ind = 0;ind < length;ind++)
-    {
-	if(arr[ind]%2 != 0)
-	{
-	    flag = 1;
-	}
-	else
-	{
-	    return;
-	}
-    }
-    if(flag == 1)
-    {
-	printf("= ");
-	for(ind = 0;ind < length-1;ind++)
-	{
-	    printf("%d + ",arr[ind]);
-	}
-	printf("%d\n",arr[length-1]);
-    }
-}
 void partOddHelp(int *arr,int ind,int value)
 {
     int lcv;
     if(value <= 0)
     {
-	printOdd(arr,ind);
+	printPartition(arr,ind);
 	return;
     }
     
-    for(lcv = 1;lcv <= value;lcv++)
+    for(lcv = 1;lcv <= value;lcv+=2)
     {
 	arr[ind] = lcv;
 	partOddHelp(arr,ind+1,value-lcv);
     }
-
-    
 }
 void partitionOdd(int value)
 {
@@ -302,42 +228,17 @@ void partitionOdd(int value)
  * The program should generate only valid partitions.  Do not
  * generates invalid partitions and checks validity before printing.
  */
-
-void printEven(int *arr,int length)
-{
-    int ind;
-    int flag;
-    for(ind = 0;ind < length;ind++)
-    {
-	if(arr[ind]%2 == 0)
-	{
-	    flag = 1;
-	}
-	else
-	{
-	    return;
-	}
-    }
-    if(flag == 1)
-    {
-	printf("= ");
-	for(ind = 0;ind < length-1;ind++)
-	{
-	    printf("%d + ",arr[ind]);
-	}
-	printf("%d\n",arr[length-1]);
-    }
-}
+    
 void partEvenHelp(int *arr,int ind,int value)
 {
     int lcv;
     if(value <= 0)
     {
-	printEven(arr,ind);
+	printPartition(arr,ind);
 	return;
     }
     
-    for(lcv = 1;lcv <= value;lcv++)
+    for(lcv = 2;lcv <= value;lcv+=2)
     {
 	arr[ind] = lcv;
 	partEvenHelp(arr,ind+1,value-lcv);
@@ -371,43 +272,27 @@ void partitionEven(int value)
  * The program should generate only valid partitions.  Do not
  * generates invalid partitions and checks validity before printing.
  */
-void printOddEven(int *arr,int length)
-{
-    int ind;
-    int flag;
-    for(ind = 0;ind+1 < length;ind++)
-    {
-	if((arr[ind]%2 != 0) && (arr[ind]%2 == 0))
-	{
-	    flag = 1;
-	}
-	else
-	{
-	    return;
-	}
-    }
-    if(flag == 1)
-    {	
-	printf("= ");
-	for(ind = 0;ind < length-1;ind++)
-	{
-	    printf("%d + ",arr[ind]);
-	}
-	printf("%d\n",arr[length-1]);
-    }
-}
-void partOddEvenHelp(int *arr,int ind, int value)
+void partOddEvenHelp(int *arr,int ind,int value)
 {
     int lcv;
     if(value <= 0)
     {
-	printOddEven(arr,ind);
+	printPartition(arr,ind);
 	return;
     }
     
     for(lcv = 1;lcv <= value;lcv++)
     {
-	arr[ind] = lcv;
+	arr[ind] = lcv ;
+	if(arr[ind]%2 != 0)
+	{
+	    lcv++;
+	}
+	else if(arr[ind]%2 == 0)
+	{
+	    lcv--;
+	}
+	arr[ind+1] = lcv ;
 	partOddEvenHelp(arr,ind+1,value-lcv);
     }
  

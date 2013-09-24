@@ -103,8 +103,6 @@ void partIncHelp(int *arr, int ind, int value)
 	    partIncHelp(arr,ind+1,value-lcv); 
 	}
     }
-    
-    
 }
 void partitionIncreasing(int value)
 {
@@ -281,21 +279,25 @@ void partOddEvenHelp(int *arr,int ind,int value)
 	return;
     }
     
-    for(lcv = 1;lcv <= value;lcv++)
+    if(ind%2 == 0)
     {
-	arr[ind] = lcv ;
-	if(arr[ind]%2 != 0)
+	for(lcv = 1;lcv <= value;lcv+=2)
 	{
-	    lcv++;
+	    arr[ind] = lcv;
+	    //printf("ODD\n");
+	    partOddEvenHelp(arr,ind+1,value-lcv);
 	}
-	else if(arr[ind]%2 == 0)
-	{
-	    lcv--;
-	}
-	arr[ind+1] = lcv ;
-	partOddEvenHelp(arr,ind+1,value-lcv);
     }
- 
+    else if(ind%2 == 1)
+    {
+	for(lcv = 2;lcv <= value;lcv+=2)
+	{
+	    arr[ind] = lcv;
+	    //printf("EVEN\n");
+	    partOddEvenHelp(arr,ind+1,value-lcv);
+	}
+    }
+     
 }
 void partitionOddAndEven(int value)
 {
@@ -324,9 +326,55 @@ void partitionOddAndEven(int value)
  */
 
 
+int primeCheck(int value)
+{
+    int i;
+    if(value<=1)
+    {
+      return 0;
+    }
+    for(i=2;i<=value-1;i++)
+    {
+	if(value%i == 0)
+	{
+	    return 0;
+	}
+    }
+    return 1;
+}
 
+void primeHelp(int *arr,int ind,int value)
+{
+    int lcv;
+    int flag;
+    if(value <= 0)
+    {
+	printPartition(arr,ind);
+	return;
+    }
+    
+    for(lcv = 0;lcv <= value;lcv++)
+    {
+	if(lcv != 2)
+	{
+	    flag = primeCheck(lcv);
+	}
+	else
+	{
+	    flag =1;
+	}
+	if(flag == 1)
+	{
+	    arr[ind] = lcv;
+	    primeHelp(arr,ind+1,value-lcv);
+	}
+    }
+}
 void partitionPrime(int value)
 {
-  printf("partitionPrime %d\n", value);
-
+    printf("partitionPrime %d\n", value);
+    int *arr;
+    arr = malloc(sizeof(int)*value);
+    primeHelp(arr,0,value);
+    free(arr);
 }

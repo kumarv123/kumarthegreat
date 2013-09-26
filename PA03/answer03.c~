@@ -135,9 +135,9 @@ int * readIntegers(const char * filename, int * numberOfIntegers)
 void swap(int *s1,int *s2)
 {
     int temp;
-    temp = s1;
-    s1 = s2;
-    s2 = temp;
+    temp = *s1;
+    *s1 = *s2;
+    *s2 = temp;
 }
 void sort(int * arr, int length)
 {
@@ -161,6 +161,7 @@ void sort(int * arr, int length)
 	swap(&arr[left],&arr[right]);
 	
     }
+    
     sort(arr,left);
     sort(&arr[left+1],length -left -1);
    	

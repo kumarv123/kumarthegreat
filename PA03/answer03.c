@@ -161,6 +161,7 @@ void sort(int * arr, int length)
 	swap(&arr[left],&arr[right]);
 	
     }
+    
     sort(arr,left);
     sort(&arr[left+1],length -left -1);
    	

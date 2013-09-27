@@ -189,6 +189,9 @@ char * * readString(char * filename, int * numString)
 	ind++;
     }
     
+    *numString = numline;
+    fclose(fptr);
+    return strArr;
 }
 
 /* ----------------------------------------------- */
@@ -197,6 +200,11 @@ char * * readString(char * filename, int * numString)
  */
 void printInteger(int * arrInteger, int numInteger)
 {
+    int ind;
+    for(ind=0;ind<numInteger;ind++)
+    {
+	printf("%d\n", arrInteger[ind]);
+    }
 }
 
 /* ----------------------------------------------- */
@@ -207,6 +215,11 @@ void printInteger(int * arrInteger, int numInteger)
  */
 void printString(char * * arrString, int numString)
 {
+    int ind;
+    for(ind=0;ind<numString;ind++)
+    {
+	printf("%s\n",arrString[ind]);
+    }
 }
 
 /* ----------------------------------------------- */
@@ -215,6 +228,7 @@ void printString(char * * arrString, int numString)
  */
 void freeInteger(int * arrInteger, int numInteger)
 {
+    free(arr);
 }
 
 /* ----------------------------------------------- */
@@ -225,6 +239,12 @@ void freeInteger(int * arrInteger, int numInteger)
  */
 void freeString(char * * arrString, int numString)
 {
+    int ind;
+    for(ind=0;ind<numString;ind++)
+    {
+	free(strArr[ind]);
+    }
+    free(strArr);
 }
 
 /* ----------------------------------------------- */
@@ -247,6 +267,22 @@ void freeString(char * * arrString, int numString)
 
 int saveInteger(char * filename, int * arrInteger, int numInteger)
 {
+    FILE *fptr = NULL;
+    int ind;
+    
+    fptr = fopen(filename,"w");
+    if(fptr == NULL)
+    {
+	fclose(fptr);
+	return 0;
+    }
+    
+    for(ind=0;ind<numInteger;ind++)
+    {
+	fprintf(fptr,"%d",arrInteger[ind]); 
+    }
+    fclose(fptr);
+    return 1;
 }
 
 /* ----------------------------------------------- */
@@ -269,6 +305,21 @@ int saveInteger(char * filename, int * arrInteger, int numInteger)
 
 int saveString(char * filename, char * * arrString, int numString)
 {
+    FILE *fptr = NULL;
+    int ind;
+    
+    if(fptr == NULL)
+    {
+	fclose(fptr)
+	return 0;
+    }
+    
+    for(ind=0;ind<numString;ind++)
+    {
+	fprintf(fptr,"%s",arrString[ind]);
+    }
+    fclose(fptr);
+    return 1;
 }
 
 /* ----------------------------------------------- */
@@ -279,8 +330,11 @@ int saveString(char * filename, char * * arrString, int numString)
  *
  */
 
+int compint()
+
 void sortInteger(int * arrInteger, int numInteger)
 {
+    qsort(arrInteger,numInteger,sizeof(int),compint);
 }
 
 

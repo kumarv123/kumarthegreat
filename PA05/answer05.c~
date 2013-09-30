@@ -228,7 +228,7 @@ void printString(char * * arrString, int numString)
  */
 void freeInteger(int * arrInteger, int numInteger)
 {
-    free(arr);
+    free(arrInteger);
 }
 
 /* ----------------------------------------------- */
@@ -242,9 +242,9 @@ void freeString(char * * arrString, int numString)
     int ind;
     for(ind=0;ind<numString;ind++)
     {
-	free(strArr[ind]);
+	free(arrString[ind]);
     }
-    free(strArr);
+    free(arrString);
 }
 
 /* ----------------------------------------------- */
@@ -279,7 +279,7 @@ int saveInteger(char * filename, int * arrInteger, int numInteger)
     
     for(ind=0;ind<numInteger;ind++)
     {
-	fprintf(fptr,"%d",arrInteger[ind]); 
+	fprintf(fptr,"%d\n",arrInteger[ind]); 
     }
     fclose(fptr);
     return 1;
@@ -310,13 +310,13 @@ int saveString(char * filename, char * * arrString, int numString)
     
     if(fptr == NULL)
     {
-	fclose(fptr)
+	fclose(fptr);
 	return 0;
     }
     
     for(ind=0;ind<numString;ind++)
     {
-	fprintf(fptr,"%s",arrString[ind]);
+	fprintf(fptr,"%s\n",arrString[ind]);
     }
     fclose(fptr);
     return 1;
@@ -330,8 +330,27 @@ int saveString(char * filename, char * * arrString, int numString)
  *
  */
 
+int compint1(const void *p1,const void *p2)
+{
+    int *intp1 = (int *)p1;
+    int *intp2 = (int *)p2;
+    int intv1 = *intp1;
+    int intv2 = *intp2;
+    
+    if(intv1 < intv2)
+    {
+	return -1;
+    }
+    if(intv1 == intv2)
+    {
+	return 0;
+    }
+    return 1;
+}
+
 void sortInteger(int * arrInteger, int numInteger)
 {
+    qsort(arrInteger,numInteger,sizeof(int),compint1);
 }
 
 
@@ -346,8 +365,20 @@ void sortInteger(int * arrInteger, int numInteger)
  */
 
 
-void sortString(char * * arrString, int numString)
+int compint2(const void *p1,const void *p2)
 {
+    char **strp1 = (char **)p1;
+    char **strp2 = (char **)p2;
+    char *strv1 = *strp1;
+    char *strv2 = *strp2;
+    
+    return strcmp(strv1,strv2);
+    
+}
+
+void sortString(char * * arrString, int numString)
+{    
+    qsort(arrString,numString,sizeof(char *),compint2);
 }
 
 

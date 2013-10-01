@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "pa05.h"
-#define MAXIMUM_LENGTH 80
+
 
 /*
  * Read a file of integers.
@@ -163,7 +163,7 @@ int * readInteger(char * filename, int * numInteger)
 char * * readString(char * filename, int * numString)
 {
     FILE *fptr = NULL;
-    char **strArr;
+    
     int numline = 0;
     int ind = 0;
     char buf[MAXIMUM_LENGTH];
@@ -179,17 +179,19 @@ char * * readString(char * filename, int * numString)
     {
 	numline++;
     }
-    
-    strArr = malloc(sizeof(char*) *numline);
+    *numString = numline;
     fseek(fptr,0,SEEK_SET);
+    char **strArr;
+    strArr = malloc(sizeof(char*) *numline);
+    
     while(fgets(buf,MAXIMUM_LENGTH,fptr) != NULL)
     {
-	strArr[ind] = malloc(sizeof(char)*(strlen(buf)+1));
+	strArr[ind] = malloc(sizeof(char)*MAXIMUM_LENGTH);
 	strcpy(strArr[ind],buf);
 	ind++;
     }
     
-    *numString = numline;
+    
     fclose(fptr);
     return strArr;
 }
@@ -218,7 +220,7 @@ void printString(char * * arrString, int numString)
     int ind;
     for(ind=0;ind<numString;ind++)
     {
-	printf("%s\n",arrString[ind]);
+	printf("%s",arrString[ind]);
     }
 }
 
@@ -308,6 +310,7 @@ int saveString(char * filename, char * * arrString, int numString)
     FILE *fptr = NULL;
     int ind;
     
+    fptr = fopen(filename,"w");
     if(fptr == NULL)
     {
 	fclose(fptr);
@@ -316,7 +319,7 @@ int saveString(char * filename, char * * arrString, int numString)
     
     for(ind=0;ind<numString;ind++)
     {
-	fprintf(fptr,"%s\n",arrString[ind]);
+	fprintf(fptr,"%s",arrString[ind]);
     }
     fclose(fptr);
     return 1;
@@ -367,18 +370,11 @@ void sortInteger(int * arrInteger, int numInteger)
 
 int compint2(const void *p1,const void *p2)
 {
-    char **strp1 = (char **)p1;
-    char **strp2 = (char **)p2;
-    char *strv1 = *strp1;
-    char *strv2 = *strp2;
-    
-    return strcmp(strv1,strv2);
-    
+    return strcmp(* (const char**) p1, * (const char**) p2);
 }
 
 void sortString(char * * arrString, int numString)
 {    
     qsort(arrString,numString,sizeof(char *),compint2);
 }
-
 

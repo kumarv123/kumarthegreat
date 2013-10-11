@@ -245,6 +245,16 @@ struct Image * loadImage(const char* filename)
 	fclose(fptr);
 	return NULL;
     }
+    
+    uint8_t new;
+    retval = fread(&new,sizeof(uint8_t),1,fptr);
+    if(retval == 1)
+    {
+	free(header);
+	freeImage(image);
+	fclose(fptr);
+	return NULL;
+    }
  
     free(header);
     fclose(fptr);
@@ -264,6 +274,7 @@ struct Image * loadImage(const char* filename)
  */
 void freeImage(struct Image * image)
 {
+  
     free(image->data);
     free(image->comment);
     free(image);
@@ -296,24 +307,25 @@ void freeImage(struct Image * image)
 void linearNormalization(struct Image * image) 
 {
     int ind;
-    uint8_t min = 180;
-    uint8_t max = 50;
-    for(ind=0;ind<(image->width * image->height;ind++)
+    uint8_t min = image->data[0];
+    uint8_t max = image->data[0];
+    for(ind=1;ind<(image->width * image->height);ind++)
     {
 	if(image->data[ind] < min)
 	{
-	   image->data[ind]  = min;
+	   min = image->data[ind];
 	}
 	if(image->data[ind] > max)
 	{
-	    image->data[ind]  = max;
+	    max = image->data[ind];
 	}
     }
     
-    for(ind=0;ind<(image->width * image->height;ind++)
+    for(ind=0;ind<(image->width * image->height);ind++)
     {
-	image->data[ind] = (image->data[ind] - min)*255 / (max-min);
+	image->data[ind] = (image->data[ind] - min)*255.0 / (max-min);
     }
+    return;
 }
 
 

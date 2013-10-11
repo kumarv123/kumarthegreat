@@ -293,10 +293,13 @@ void freeImage(struct Image * image)
  * The first for-loop completes step (1), and the second for-loop 
  * to complete step (2). 
  */
-void linearNormalization(struct Image * image)
+void linearNormalization(struct Image * image) 
 {
+    int ind;
+    int min;
+    int max;
+    for(ind=0;)
     
 }
-
 
 

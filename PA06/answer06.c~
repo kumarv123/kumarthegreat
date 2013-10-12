@@ -187,6 +187,7 @@ struct Image * loadImage(const char* filename)
 	fclose(fptr);
 	return NULL;
     }
+    
     retval = fread(header,sizeof(struct ImageHeader),1,fptr);
     if(retval != 1)
     {
@@ -202,13 +203,13 @@ struct Image * loadImage(const char* filename)
 	return NULL;
     }
     
-    if(header->width == 0)
+    if(header->width <= 0)
     {
 	free(header);
 	fclose(fptr);
 	return NULL;
     }
-    if(header->height == 0)
+    if(header->height <= 0)
     {
 	free(header);
 	fclose(fptr);
@@ -219,6 +220,7 @@ struct Image * loadImage(const char* filename)
     image = malloc(sizeof(struct Image));
     if(image == NULL)
     {
+	free(header);
 	fclose(fptr);
 	return NULL;
     }
@@ -226,32 +228,43 @@ struct Image * loadImage(const char* filename)
     image->width = header->width;
     image->height = header->height;
     image->comment = malloc(sizeof(char)*(header->comment_len));
+    if(image->comment[header->comment_len-1] == '\0')
+    {
+	free(header);
+	fclose(fptr);
+	return NULL;
+    }
+    
     image->data = malloc(sizeof(uint8_t)*(header->width)*(header->height));
+    if(image->data == NULL)
+    {
+	free(header);
+	free(image->comment);
+	free(image);
+    }
     
     retval = fread(image->comment,sizeof(char),header->comment_len,fptr);
     if(retval != header->comment_len)
     {
 	free(header);
-	freeImage(image);
 	fclose(fptr);
 	return NULL;
     }
+    
     
     retval = fread(image->data,sizeof(uint8_t),(header->width)*(header->height),fptr);
     if(retval != (header->width * header->height))
     {
 	free(header);
-	freeImage(image);
 	fclose(fptr);
 	return NULL;
     }
-    
+ 
     uint8_t new;
     retval = fread(&new,sizeof(uint8_t),1,fptr);
     if(retval == 1)
     {
 	free(header);
-	freeImage(image);
 	fclose(fptr);
 	return NULL;
     }
@@ -274,10 +287,12 @@ struct Image * loadImage(const char* filename)
  */
 void freeImage(struct Image * image)
 {
-  
-    free(image->data);
-    free(image->comment);
-    free(image);
+    if(image != NULL)
+    {  
+	free(image->data);
+	free(image->comment);
+	free(image);
+    }
 }
 
 /*
@@ -327,5 +342,4 @@ void linearNormalization(struct Image * image)
     }
     return;
 }
-
 

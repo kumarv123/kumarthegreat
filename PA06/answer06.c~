@@ -228,13 +228,7 @@ struct Image * loadImage(const char* filename)
     image->width = header->width;
     image->height = header->height;
     image->comment = malloc(sizeof(char)*(header->comment_len));
-    //if(image->comment[header->comment_len-1] != '\0')
-    if(header->comment_len != 1)
-    {
-	free(header);
-	fclose(fptr);
-	return NULL;
-    }
+    
     
     image->data = malloc(sizeof(uint8_t)*(header->width)*(header->height));
     if(image->data == NULL)
@@ -260,7 +254,14 @@ struct Image * loadImage(const char* filename)
 	fclose(fptr);
 	return NULL;
     }
- 
+    
+    if(image->comment[header->comment_len-1] != '\0')
+    {
+	free(header);
+	fclose(fptr);
+	return NULL;
+    }
+    
     uint8_t new;
     retval = fread(&new,sizeof(uint8_t),1,fptr);
     if(retval == 1)
@@ -344,3 +345,4 @@ void linearNormalization(struct Image * image)
     return;
 }
 
+// DONE

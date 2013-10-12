@@ -228,7 +228,7 @@ struct Image * loadImage(const char* filename)
     image->width = header->width;
     image->height = header->height;
     image->comment = malloc(sizeof(char)*(header->comment_len));
-    if(image->comment[header->comment_len-1] == '\0')
+    if(header->comment_len != 1)
     {
 	free(header);
 	fclose(fptr);

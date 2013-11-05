@@ -53,8 +53,25 @@ SparseNode *SparseNode_create(int index, int value)
 
 SparseNode * SparseArray_insert ( SparseNode * array, int index, int value )
 {
-  return array;
-
+    if(array == NULL)
+    {
+	return SparseNode_create(index,value); 
+    }
+    
+    if((array -> index) == index)
+    {
+	array -> value = value;
+	return array;
+    }
+    
+    if((array -> index) > index)
+    {
+	array -> left = SparseArray_insert(array -> left,index,value);
+	return array;
+    }
+    
+    array -> right = SparseArray_insert(array -> right,index,value);
+    return array;
 }
 
 /* Build a sparse array tree from given indices and values with specific length.
@@ -79,7 +96,19 @@ SparseNode * SparseArray_insert ( SparseNode * array, int index, int value )
 
 SparseNode *SparseArray_build(int * indicies, int * values, int length)
 {
-  return NULL;
+    int i;
+    SparseNode * node = NULL;
+    node = SparseNode_create(indicies[0],values[0]);
+    if(length == 0)
+    {
+	return NULL;
+    }
+    
+    for(i = 1;1<length;i++)
+    {
+	node = SparseArray_insert ( SparseNode * node,indicies[i], int values[i]);
+    }
+    return node;
 }
 
 /* Destroy an entire sparse array tree. 
@@ -95,7 +124,14 @@ SparseNode *SparseArray_build(int * indicies, int * values, int length)
  */
 void SparseArray_destroy ( SparseNode * array )
 {
-
+    if(array == NULL)
+    {
+	return;
+    }
+    
+    SparseArray_destroy(array -> left);
+    SparseArray_destroy(array -> right);
+    free(array);
 }
 
 /* Retrieve the smallest index in the sparse array tree.
@@ -110,7 +146,11 @@ void SparseArray_destroy ( SparseNode * array )
  */
 int SparseArray_getMin ( SparseNode * array )
 {
-  return 0;
+    if(array -> left == NULL)
+    {
+	return (array -> index); 
+    }
+    return SparseArray_getMin (array -> left);
 }
 
 /* Retrieve the largest index in the sparse array tree. 
@@ -125,8 +165,11 @@ int SparseArray_getMin ( SparseNode * array )
  */
 int SparseArray_getMax ( SparseNode * array )
 {
-
-  return 0 ;
+    if(array -> right == NULL)
+    {
+	return (array -> index); 
+    }
+    return SparseArray_getMin (array -> right);
 }
 
 

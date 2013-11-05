@@ -22,10 +22,10 @@ SparseNode *SparseNode_create(int index, int value)
 {
     SparseNode * node = NULL;
     node = malloc(sizeof(SparseNode));
-   // if(node == NULL)
-    //{
-//	return NULL;
- //   }
+    if(node == NULL)
+   {
+	return NULL;
+   }
     node -> index = index;
     node -> value = value;
     node -> left = NULL;
@@ -53,13 +53,14 @@ SparseNode *SparseNode_create(int index, int value)
 
 SparseNode * SparseArray_insert ( SparseNode * array, int index, int value )
 {
+    if(value == 0)
+    {
+	return NULL;
+    }  
+  
     if(array == NULL)
     {
 	return SparseNode_create(index,value); 
-    }
-    if(value == 0)
-    {
-	return(array);
     }
     
     if((array -> index) == index)
@@ -353,6 +354,11 @@ SparseNode * SparseArray_merge(SparseNode * array_1, SparseNode * array_2)
 	return copy1;
     }
     
+    copy1 = merge_helper(copy1,array_2);
     return NULL;
+}
 
+SparseNode *merge_helper(SparseNode * array_1, SparseNode * array_2)
+{
+    if()
 }

@@ -45,7 +45,9 @@ int main(int argc, char ** argv)
 	printf("File error!\n");
 	return EXIT_FAILURE;
     }
-    Huff_postOrderPrint(tree);
+    
+    //This function prints the output on the output file
+    Huff_postOrderPrint(tree,fptr);
     
     //This destroys the allocated memory
     Huff_destroyTree(tree);

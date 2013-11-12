@@ -30,8 +30,7 @@ int main(int argc, char ** argv)
     //Reading file and creating huffman tree
     if(flag == 0) //input file is char based
     {
-	char poop = 'a';
-	tree = Huff_CharRead(poop);
+	tree = Huff_CharRead(argv[1]);
     }
     else if(flag == 1)//input file is bit-based
     {
@@ -46,7 +45,8 @@ int main(int argc, char ** argv)
 	printf("File error!\n");
 	return EXIT_FAILURE;
     }
-    Huff_postOrderPrint(tree);
+    
+    Huff_postOrderPrint(tree,fptr);
     
     //This destroys the allocated memory
     Huff_destroyTree(tree);

@@ -92,7 +92,7 @@ HuffNode *Huff_CharRead(char * filename)
 	      command = fgetc(fptr);
 	      if(command == EOF)
 	      {
-		  return EXIT_FAILURE;
+		  return NULL;
 	      }
 	      st = Stack_push(st,HuffNode_create(command));
 	  }
@@ -116,11 +116,12 @@ HuffNode *Huff_CharRead(char * filename)
 	    }
 	}
     }
+    return NULL;
 }
 
 
 //This function prints the output 
-void Huff_postOrderPrint(HuffNode *tree)
+void Huff_postOrderPrint(HuffNode *tree,FILE *fptr)
 {
     // Base case: empty subtree
     if (tree == NULL) {
@@ -130,17 +131,16 @@ void Huff_postOrderPrint(HuffNode *tree)
     // Recursive case: post-order traversal
 
     // Visit left
-    printf("Left\n");
-    Huff_postOrderPrint(tree->left);
-	printf("Back\n");
+    fprintf(fptr,"Left\n");
+    Huff_postOrderPrint(tree->left,fptr);
+	fprintf(fptr,"Back\n");
     // Visit right
-    printf("Right\n");
-    Huff_postOrderPrint(tree->right);
-	printf("Back\n");
+    fprintf(fptr,"Right\n");
+    Huff_postOrderPrint(tree->right,fptr);
+	fprintf(fptr,"Back\n");
     // Visit node itself (only if leaf)
     if (tree->left == NULL && tree->right == NULL) {
-		printf("Leaf: %c\n", tree->value);
+		fprintf(fptr,"Leaf: %c\n", tree->value);
     }
     
-
 }

@@ -51,6 +51,16 @@ Stack *Stack_pop(Stack *head)
   return item;
 }
 
+//This function creates a first node of a tree
+HuffNode * HuffNode_create(int val)
+{
+  HuffNode * tn = malloc(sizeof(HuffNode));
+  tn -> value = val;
+  tn -> left = NULL;
+  tn -> righ = NULL;
+  return tn;
+}
+
 //This function destroys all the allocated memory.
 void Huff_destroyTree(HuffNode *tree);
 {
@@ -66,21 +76,43 @@ void Huff_destroyTree(HuffNode *tree);
 
 HuffNode *Huff_CharRead(char filename)
 {
-    int command;
+    int command = 0;
     FILE *fptr = NULL;
     fptr = fopen(filename,"r");
     if(fptr == NULL)
     {
 	return NULL;
     }
-    while(!EOF)
+    
+    Stack *st = NULL;
+    while((command=fgetc(fptr)) != EOF)
     {
 	command = fgetc(fptr);
-	
-    }
-    
-    
-    
+	if(command == 1)
+	{
+	    HuffNode *leaf = HuffNode_create(int command);
+	    st =  Stack_push(st,leaf);
+	}
+	if(command == 0)
+	{
+	    HuffNode * A = st -> tn;
+	    st = Stack_pop(st);
+	    if (st == NULL)
+	    {
+		return A;
+	    }
+	    else
+	    {
+		TreeNode * B = st -> tn;
+		st = Stack_pop(st);
+		TreeNode * par = malloc(sizeof(TreeNode));
+		par -> value = ' '; // doesn't matter
+		par -> right = A;
+		par -> left = B;
+		st = Stack_push(st, par);
+	    }
+	}
+    }   
 }
 
 

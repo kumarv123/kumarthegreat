@@ -32,9 +32,9 @@ int main(int argc, char ** argv)
     {
 	tree = Huff_CharRead(argv[1]);
     }
-    elseif(flag == 1)//input file is bit-based
+    else if(flag == 1)//input file is bit-based
     {
-	tree = Huff_BitRead(argv[1]);
+	//tree = Huff_BitRead(argv[1]);
     }
     fclose(fptr);
     

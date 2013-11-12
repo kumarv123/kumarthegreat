@@ -28,7 +28,7 @@ int checkBitCh(FILE * fptr)
 // This function inserts a new node in the stack.
 Stack *Stack_push(Stack *head,HuffNode *node)
 {
-   Stack *item = malloc(sizeof(List)); // This allocates the dynamic memory to the List type pointer.
+   Stack *item = malloc(sizeof(Stack)); // This allocates the dynamic memory to the List type pointer.
    if(item == NULL)
    {
      return NULL;
@@ -57,12 +57,12 @@ HuffNode * HuffNode_create(int val)
   HuffNode * tn = malloc(sizeof(HuffNode));
   tn -> value = val;
   tn -> left = NULL;
-  tn -> righ = NULL;
+  tn -> right = NULL;
   return tn;
 }
 
 //This function destroys all the allocated memory.
-void Huff_destroyTree(HuffNode *tree);
+void Huff_destroyTree(HuffNode *tree)
 {
     if(tree == NULL)
     {
@@ -74,7 +74,7 @@ void Huff_destroyTree(HuffNode *tree);
 }
 
 
-HuffNode *Huff_CharRead(char filename)
+HuffNode *Huff_CharRead(char * filename)
 {
     int command = 0;
     FILE *fptr = NULL;
@@ -85,17 +85,20 @@ HuffNode *Huff_CharRead(char filename)
     }
     
     Stack *st = NULL;
-    while((command=fgetc(fptr)) != EOF)
-    {
-	command = fgetc(fptr);
-	if(command == 1)
+     while((command = fgetc(fptr)) != EOF)// This loop opens the file till its end.
+     {
+	  if(command == '1')// THis statement checks whether the c is 1 or not.
+	  {
+	      command = fgetc(fptr);
+	      if(command == EOF)
+	      {
+		  return EXIT_FAILURE;
+	      }
+	      st = Stack_push(st,HuffNode_create(command));
+	  }
+	if(command == '0') 
 	{
-	    HuffNode *leaf = HuffNode_create(int command);
-	    st =  Stack_push(st,leaf);
-	}
-	if(command == 0)
-	{
-	    HuffNode * A = st -> tn;
+	    HuffNode * A = st -> node;
 	    st = Stack_pop(st);
 	    if (st == NULL)
 	    {
@@ -103,16 +106,16 @@ HuffNode *Huff_CharRead(char filename)
 	    }
 	    else
 	    {
-		TreeNode * B = st -> tn;
+		HuffNode * B = st -> node;
 		st = Stack_pop(st);
-		TreeNode * par = malloc(sizeof(TreeNode));
+		HuffNode * par = malloc(sizeof(HuffNode));
 		par -> value = ' '; // doesn't matter
 		par -> right = A;
 		par -> left = B;
 		st = Stack_push(st, par);
 	    }
 	}
-    }   
+    }
 }
 
 

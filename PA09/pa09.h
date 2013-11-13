@@ -17,10 +17,12 @@ typedef struct _stack {
 
 int checkBitCh(FILE * fptr);
 HuffNode * Huff_CharRead(char * filename);
+HuffNode * Huff_BitRead(char * filename);
 HuffNode * HuffNode_create(int val);
 Stack *Stack_pop(Stack *head);
 Stack *Stack_push(Stack *head,HuffNode *node);
 void Huff_destroyTree(HuffNode *tree);
 void Huff_postOrderPrint(HuffNode *tree,FILE *fptr);
+
 #endif
 

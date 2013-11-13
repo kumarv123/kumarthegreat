@@ -32,10 +32,13 @@ int main(int argc, char ** argv)
     {
 	tree = Huff_CharRead(argv[1]);
     }
-    else if(flag == 1)//input file is bit-based
+    
+    else//input file is bit-based
     {
-	//tree = Huff_BitRead(argv[1]);
+	tree = Huff_BitRead(argv[1]);
+	printf("Helly Vijit\n");
     }
+    
     fclose(fptr);
     
     //writing the output
@@ -46,6 +49,7 @@ int main(int argc, char ** argv)
 	return EXIT_FAILURE;
     }
     
+    //This function prints the output on the output file
     Huff_postOrderPrint(tree,fptr);
     
     //This destroys the allocated memory

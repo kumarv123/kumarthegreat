@@ -26,6 +26,7 @@ int checkBitCh(FILE * fptr)
 }
 
 // This function inserts a new node in the stack.
+// It return a new stack
 Stack *Stack_push(Stack *head,HuffNode *node)
 {
    Stack *item = malloc(sizeof(Stack)); // This allocates the dynamic memory to the List type pointer.
@@ -39,6 +40,7 @@ Stack *Stack_push(Stack *head,HuffNode *node)
 }
 
 // This function pops or free(deallocate) the node in a Stack.
+// It return a modified stack
 Stack *Stack_pop(Stack *head)
 {
   if(head == NULL) // This checks whether the head is NULL or not, if it is then it will return NULL.
@@ -52,6 +54,7 @@ Stack *Stack_pop(Stack *head)
 }
 
 //This function creates a first node of a tree
+// It return a created huff node.
 HuffNode * HuffNode_create(int val)
 {
   HuffNode * tn = malloc(sizeof(HuffNode));
@@ -62,6 +65,7 @@ HuffNode * HuffNode_create(int val)
 }
 
 //This function destroys all the allocated memory.
+// THis function return nothing. it's a void.
 void Huff_destroyTree(HuffNode *tree)
 {
     if(tree == NULL)
@@ -73,7 +77,8 @@ void Huff_destroyTree(HuffNode *tree)
     free(tree);
 }
 
-
+//This function reads the char-based input file and then creates a huffman tree.
+// It Returns a structure of HuffNode type.
 HuffNode *Huff_CharRead(char * filename)
 {
     int command = 0;
@@ -85,24 +90,26 @@ HuffNode *Huff_CharRead(char * filename)
     }
     
     Stack *st = NULL;
-     while((command = fgetc(fptr)) != EOF)// This loop opens the file till its end.
-     {
-	  if(command == '1')// THis statement checks whether the c is 1 or not.
-	  {
-	      command = fgetc(fptr);
-	      if(command == EOF)
-	      {
-		  return NULL;
-	      }
-	      st = Stack_push(st,HuffNode_create(command));
-	  }
+    while((command = fgetc(fptr)) != EOF)// This loop opens the file till its end.
+    {
+	
+	if(command == '1')// THis statement checks whether the command is 1 or not.
+	{
+	    command = fgetc(fptr);
+	    if(command == EOF)
+	    {
+		
+		return NULL;
+	    }
+	    st = Stack_push(st,HuffNode_create(command));
+	}
 	if(command == '0') 
 	{
 	    HuffNode * A = st -> node;
 	    st = Stack_pop(st);
 	    if (st == NULL)
 	    {
-		return A;
+		return A;// Tree is complete here 
 	    }
 	    else
 	    {
@@ -116,10 +123,41 @@ HuffNode *Huff_CharRead(char * filename)
 	    }
 	}
     }
+    return NULL;
 }
 
+//This function reads the bit-based input file and then creates the function.
+//It returns a structure HuffNode type
+HuffNode *Huff_BitRead(char *filename)
+{
+    int command = 0;
+    FILE *fptr = NULL;
+    fptr = fopen(filename,"r");
+    if(fptr == NULL)
+    {
+	return NULL;
+    }
+    
+    //Stack *st = NULL;
+    while(((command = fgetc(fptr))&0x1) != EOF)// This loop opens the file till its end.
+    {
+	command = fgetc(fptr);
+	command = 0x7;
+	command = fgetc(fptr);
+	command = fgetc(fptr);
+	command = fgetc(fptr);
+	command = fgetc(fptr);
+	command = fgetc(fptr);
+	command = fgetc(fptr);
+	command = fgetc(fptr);
+	command = fgetc(fptr);
+	command = fgetc(fptr);
+    }
+    return NULL;
+}
 
 //This function prints the output 
+//It returns nothing because it has void in the return argument
 void Huff_postOrderPrint(HuffNode *tree,FILE *fptr)
 {
     // Base case: empty subtree

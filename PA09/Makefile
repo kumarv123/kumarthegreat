@@ -10,7 +10,7 @@ VALGRIND = valgrind --tool=memcheck --leak-check=full --verbose
 pa09: $(OBJS) $(HDRS)
 	$(GCC) $(CFLAGS) $(OBJS) -o $@
 
-test: | test_ch01 test_ch02 test_ch03 test_ch04 test_ch05 test_ch06 test_bit01 test_bit02 test_bit03 test_bit04 test_bit05 test_bit06
+test: | test_ch01 test_ch02 test_ch03 test_ch04 test_ch05 test_ch06 test_bit01 test_bit02 test_bit03 test_bit04 test_bit05 test_bit06 test_bit07
 
 test_ch01: $(TARGET) | environment
 	./$(TARGET) inputs/ch_header_inputs/testcase1_ch outputs/output_ch01

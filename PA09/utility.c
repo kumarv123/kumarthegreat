@@ -130,7 +130,17 @@ HuffNode *Huff_CharRead(char * filename)
 //It returns a structure HuffNode type
 HuffNode *Huff_BitRead(char *filename)
 {
-    int command = 0;
+    unsigned char command = 0;
+    unsigned char ch1 = 0;
+    unsigned char ch2 = 0;
+    unsigned char ch2_temp = 0;
+    unsigned char character = 0;
+    unsigned char mask[] = {0x80,0x40,0x20,0x10,0x08,0x04,0x02,0x01};
+    int position = 1;
+    int lcv = 0;
+    
+    int sw = -1;
+    
     FILE *fptr = NULL;
     fptr = fopen(filename,"r");
     if(fptr == NULL)
@@ -138,19 +148,51 @@ HuffNode *Huff_BitRead(char *filename)
 	return NULL;
     }
     
-    //Stack *st = NULL;
-    while(((command = fgetc(fptr))&0x1) != EOF)// This loop opens the file till its end.
-    {
-	command = fgetc(fptr)&0x1;
-	command = fgetc(fptr)&0x8;
-	command = fgetc(fptr);
-	command = fgetc(fptr);
-	command = fgetc(fptr);
-	command = fgetc(fptr);
-	command = fgetc(fptr);
-	command = fgetc(fptr);
-	command = fgetc(fptr);
-	command = fgetc(fptr);
+    Stack *st = NULL;
+    ch1 = fgetc(fptr);
+    while(!feof(fptr))// This loop opens the file till its end.
+    {	
+	command = ch1 &mask[lcv];
+	if((command) == mask[lcv])
+	{
+	    ch1 = ch1 << position; // THis left shifts my first charater
+	    ch2 = fgetc(fptr);     // THis gets my second character
+	    ch2_temp = ch2;     
+	    ch2_temp = ch2_temp >> (8-position);// THis left shifts my second character.
+	    character = ch1 | ch2_temp; // THis gets me the chracter after the command is 1.
+	    st = Stack_push(st,HuffNode_create(character));
+	    ch1 = ch2;
+	}
+	if((command) != mask[lcv])
+	{
+	    HuffNode * A = st -> node;
+	    st = Stack_pop(st);
+	    if (st == NULL)
+	    {
+		sw = 1;	
+		return A;// Tree is complete here 
+	    }
+	    else
+	    {
+		HuffNode * B = st -> node;
+		st = Stack_pop(st);
+		HuffNode * par = malloc(sizeof(HuffNode));
+		par -> value = ' '; // doesn't matter
+		par -> right = A;
+		par -> left = B;
+		st = Stack_push(st, par);
+	    }
+	}
+	if(position == 8)
+	{
+	  ch1 = fgetc(fptr);
+	  position = 0;
+	  lcv = -1;
+	}
+	
+	position++;
+	lcv++;
+	
     }
     return NULL;
 }

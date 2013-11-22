@@ -31,7 +31,19 @@ Stack * Stack_create()
  */
 void Stack_destroy(Stack * stack)
 {
-    
+    if(stack->list == NULL)
+    {
+	return;
+    }
+    ListNode *temp = NULL;
+    while(stack->list != NULL)
+    {
+	temp = stack->list->next;
+	free(stack->list);
+	stack->list = temp;
+    }
+    free(stack);
+    return;
 }
 
 /**
@@ -39,6 +51,10 @@ void Stack_destroy(Stack * stack)
  */
 int Stack_isEmpty(Stack * stack)
 {
+    if(stack->list == NULL)
+    {
+	return TRUE;
+    }
     return FALSE;
 }
 
@@ -51,7 +67,17 @@ int Stack_isEmpty(Stack * stack)
  */
 int Stack_pop(Stack * stack)
 {
-    return -1;
+    int val;
+    if(stack->list == NULL)
+    {
+	return 0;
+    }
+    val = stack->list->value;
+    ListNode *temp = NULL;
+    temp = stack->list->next;
+    free(stack->list);
+    stack->list = temp;
+    return val;
 }
 
 /**
@@ -63,7 +89,16 @@ int Stack_pop(Stack * stack)
  */
 void Stack_push(Stack * stack, int value)
 {
-
+    ListNode *node = malloc(sizeof(ListNode));
+    node->value = value;
+    if(stack->list == NULL)
+    {
+	stack->list = node;
+	return;
+    }
+    node->next = stack->list;
+    stack->list = node;
+    return;
 }
 
 /**
@@ -88,7 +123,7 @@ void Stack_push(Stack * stack, int value)
  */
 void stackSort(int * array, int len)
 {
-
+    
 }
 
 /**
@@ -109,6 +144,11 @@ void stackSort(int * array, int len)
  */
 int isStackSortable(int * array, int len)
 {
+    if(len < 3)
+    {
+	return TRUE;
+    }
+    
     return FALSE;
 }
 

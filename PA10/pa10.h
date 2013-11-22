@@ -26,10 +26,3 @@ void genShapes(int n);
 
 #endif
 
-/*
-while (head != NULL)
-{
-Node * p = head -> next;
-free (head);
-head = p;
-}*/

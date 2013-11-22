@@ -144,12 +144,48 @@ void stackSort(int * array, int len)
  */
 int isStackSortable(int * array, int len)
 {
+    int ind;
+    int max = 0;
+    int maxind = 0;
+    int leftmax = 0;
+    int rightmin = 99999999;
     if(len < 3)
     {
 	return TRUE;
     }
+
+    for(ind=0;ind<len;ind++)
+    {
+	if(array[ind] > max)
+	{
+	    max = array[ind];
+	    maxind = ind;
+	}
+    }
+    for(ind =0;ind<maxind;ind++)
+    {
+	if(array[ind] > leftmax)
+	{
+	    leftmax = array[ind];
+	}
+    }
     
-    return FALSE;
+    for(ind =maxind+1;ind<len;ind++)
+    {
+	if(array[ind] < rightmin)
+	{
+	    rightmin = array[ind];
+	}
+    }
+    if(leftmax < rightmin || maxind == 0 || maxind == len-1)
+    {
+      
+	return TRUE;
+    }
+    else
+    {
+	return FALSE;
+    }
 }
 
 /**

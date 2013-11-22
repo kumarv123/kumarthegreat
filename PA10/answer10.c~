@@ -13,8 +13,15 @@
  */
 Stack * Stack_create()
 {
+    Stack *st = malloc(sizeof(Stack));
+    if(st == NULL)
+    {
+	return NULL;
+    }
     
-    return NULL;
+    st -> list = NULL;
+    
+    return st;;
 }
 
 /**
@@ -24,7 +31,7 @@ Stack * Stack_create()
  */
 void Stack_destroy(Stack * stack)
 {
-
+    
 }
 
 /**

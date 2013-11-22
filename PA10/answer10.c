@@ -19,9 +19,9 @@ Stack * Stack_create()
 	return NULL;
     }
     
-    st -> list = malloc()
+    st -> list = NULL;
     
-    return NULL;
+    return st;;
 }
 
 /**
@@ -31,7 +31,18 @@ Stack * Stack_create()
  */
 void Stack_destroy(Stack * stack)
 {
-
+    if(stack == NULL)
+    {
+	return;
+    }
+    ListNode *temp = NULL;
+    while(stack->list != NULL)
+    {
+	temp = stack->list->next;
+	free(stack->list);
+	stack->list = temp;
+    }
+    free(stack);
 }
 
 /**
@@ -39,6 +50,7 @@ void Stack_destroy(Stack * stack)
  */
 int Stack_isEmpty(Stack * stack)
 {
+    
     return FALSE;
 }
 

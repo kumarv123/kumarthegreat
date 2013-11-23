@@ -141,8 +141,8 @@ void stackSort(int * array, int len)
 	    array[write_index] = value;
 	    write_index++;
 	}
-	free(stack);
-	//Stack_destroy(stack);
+	//free(stack);
+	Stack_destroy(stack);
     }
 }
 

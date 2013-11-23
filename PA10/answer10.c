@@ -31,7 +31,7 @@ Stack * Stack_create()
  */
 void Stack_destroy(Stack * stack)
 {
-    if(stack->list == NULL)
+    if(stack == NULL)
     {
 	return;
     }
@@ -91,11 +91,6 @@ void Stack_push(Stack * stack, int value)
 {
     ListNode *node = malloc(sizeof(ListNode));
     node->value = value;
-    if(stack->list == NULL)
-    {
-	stack->list = node;
-	return;
-    }
     node->next = stack->list;
     stack->list = node;
     return;
@@ -146,6 +141,8 @@ void stackSort(int * array, int len)
 	    array[write_index] = value;
 	    write_index++;
 	}
+	//free(stack);
+	Stack_destroy(stack);
     }
 }
 
@@ -167,6 +164,8 @@ void stackSort(int * array, int len)
  */
 int isStackSortable(int * array, int len)
 {
+    int f;
+    int s;
     int ind;
     int max = 0;
     int maxind = 0;
@@ -200,11 +199,20 @@ int isStackSortable(int * array, int len)
 	    rightmin = array[ind];
 	}
     }
-    if(leftmax < rightmin || maxind == 0 || maxind == len-1)
+    
+    if(leftmax > rightmin)
     {
       
+	return FALSE;
+    }
+
+    f = isStackSortable(array,maxind);
+    s = isStackSortable(&array[maxind+1],len-maxind-1);
+    if(f == TRUE && s == TRUE)
+    {
 	return TRUE;
     }
+
     else
     {
 	return FALSE;
@@ -226,12 +234,48 @@ int isStackSortable(int * array, int len)
  * The correct outputs for sizes [1..9] are in the 'expected' 
  * directory.
  */
-void genShapes(int k)
+
+static void swap ( int * a , int * b )
 {
-    int *array = malloc()
-    
+    int t = * a ;
+    * a = * b ;
+    * b = t ;
 }
 
+static void permuteHelper(int *array, int len, int ind)
+{
+    TreeNode *tree;
+    if ( ind == len )
+    {
+	if(isStackSortable(array, len))
+	{
+	    tree = Tree_build(array,len);
+	    Tree_printShape(tree);
+	    Tree_destroy(tree);
+	}
+    }
+    int pos ;
+    for ( pos = ind ; pos < len ; pos ++)
+    {
+	swap (&array[pos] , &array[ind]); 
+	permuteHelper ( array,len ,ind + 1);
+	swap (&array[pos] , &array[ind]); 
+    }
+}
 
+void permute( int *array , int len )
+{
+    permuteHelper ( array , len , 0);
+}
 
-
+void genShapes(int k)
+{
+    int ind;
+    int *array = malloc(sizeof(int)*k);
+    for(ind=0;ind<k;ind++)
+    {
+	array[ind] = ind;
+    }
+    permute(array,k); 
+    free(array);
+}

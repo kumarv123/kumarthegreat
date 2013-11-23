@@ -123,7 +123,30 @@ void Stack_push(Stack * stack, int value)
  */
 void stackSort(int * array, int len)
 {
+    if(isStackSortable(array,len))
+    {
+	int ind;
+	int write_index = 0;
+	int value;
+	Stack *stack = Stack_create();
+	for(ind=0;ind<len;ind++)
+	{
+	    while((stack->list != NULL) && (array[ind] > stack->list->value))
+	    {
+		value = Stack_pop(stack);
+		array[write_index] = value;
+		write_index++;
+	    }
+	    Stack_push(stack,array[ind]);
+	}
     
+	while(stack->list != NULL)
+	{
+	    value = Stack_pop(stack);
+	    array[write_index] = value;
+	    write_index++;
+	}
+    }
 }
 
 /**
@@ -148,7 +171,7 @@ int isStackSortable(int * array, int len)
     int max = 0;
     int maxind = 0;
     int leftmax = 0;
-    int rightmin = 99999999999;
+    int rightmin = 999999999;
     if(len < 3)
     {
 	return TRUE;
@@ -205,7 +228,7 @@ int isStackSortable(int * array, int len)
  */
 void genShapes(int k)
 {
-
+    
 }
 
 

@@ -141,7 +141,61 @@ void printPuzzle(const char * state)
  * (5) Swap the characters at 'position' and 'target_position'
  */
 int move(char * state, char m)
-{    
+{
+    int new_row;
+    int new_col;
+    int tar_pos;
+    char *stpos;
+    int pos;
+    int row;
+    int col;
+    
+    //(1)
+    stpos = strstr(state,"-");
+    pos = stpos - state; // THis calculates the position of the "-" in a string
+    row = pos/SIDELENGTH;
+    col = pos % SIDELENGTH;
+    
+    //(2)
+    if(m == 'U')
+    {
+	new_row = row - 1;
+	new_col = col;
+    }
+    if(m == 'D')
+    {
+	new_row = row + 1;
+	new_col = col;
+    }
+    if(m == 'L')
+    {
+        new_col = col -1;
+	new_row = row;
+    }
+    if(m == 'R')
+    {
+	new_row = row;
+	new_col = col +1;
+    }
+    
+    //(3)
+    if(new_row < 0 || new_row >= SIDELENGTH)
+    {
+	return FALSE;
+    }
+    if(new_col < 0 || new_col >= SIDELENGTH)
+    {
+	return FALSE;
+    }
+
+    //(4)
+    tar_pos = new_row * SIDELENGTH + new_col;
+    
+    //(5)
+    int temp = state[pos];
+    state[pos] = state[tar_pos];
+    state[tar_pos] = temp;
+    
     return TRUE;
 }
 
@@ -160,7 +214,22 @@ int move(char * state, char m)
  */
 void processMoveList(char * state, const char * movelist)
 {
-
+    int i;
+    int len = strlen(movelist);
+    int flag = TRUE;
+    
+    for(i=0;i<len;i++)
+    {
+	if(!(move(state,movelist[i])))
+	{
+	    flag = FALSE;
+	    printf("I\n");
+	}
+    }
+    if(flag == TRUE)
+    {
+	printf("%s\n",state);
+    }
 }
 
 /**
@@ -168,7 +237,17 @@ void processMoveList(char * state, const char * movelist)
  */
 MoveTree * MoveTree_create(const char * state, const char * moves)
 {
-    return NULL;
+    MoveTree * tree = NULL;
+    tree = malloc(sizeof(MoveTree));
+    if(tree == NULL)
+    {
+	return NULL;
+    }
+    tree -> state = state;
+    tree -> moves = moves;
+    tree -> left = NULL;
+    tree -> right = NULL;
+    return tree;
 }
 
 /**
@@ -176,7 +255,15 @@ MoveTree * MoveTree_create(const char * state, const char * moves)
  */
 void MoveTree_destroy(MoveTree * node)
 {
-    
+    if(node == NULL)
+    {
+	return;
+    }
+    MoveTree_destroy (node -> left);
+    MoveTree_destroy (node -> right);
+    free(state);
+    free(moves);
+    free(state);
 }
 
 /**
@@ -188,7 +275,27 @@ void MoveTree_destroy(MoveTree * node)
 MoveTree * MoveTree_insert(MoveTree * node, const char * state,
 			   const char * moves)
 {
-    return NULL;
+    int comp;
+    
+    if(node == NULL)
+    {
+	return MoveTree_create(state,moves);
+    }
+    
+    comp = strcmp(state,node->state)
+    if(comp < 0)
+    {
+	node -> left = MoveTree_insert(node->left,state,moves);
+    }
+    else if(comp > 0)
+    {
+	node -> right = MoveTree_insert(node->right,state,moves);
+    }
+    else if(strlen(moves) < strlen(node -> moves))
+    {
+	strcpy(node -> moves, moves);
+    }
+    return node;
 }
 
 /**
@@ -197,7 +304,24 @@ MoveTree * MoveTree_insert(MoveTree * node, const char * state,
  */
 MoveTree * MoveTree_find(MoveTree * node, const char * state)
 {
-  
+    int comp;
+    
+    if(node == NULL)
+    {
+	return NULL;
+    }
+    
+    comp = strcmp(state,node->state)
+    if(comp < 0)
+    {
+	return MoveTree_find(node->right,state);
+    }
+    else if(comp > 0)
+    {
+	return MoveTree_find(node->left,state);
+    }
+    
+    return node;
 }
 
 /**

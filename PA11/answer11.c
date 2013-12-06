@@ -243,8 +243,8 @@ MoveTree * MoveTree_create(const char * state, const char * moves)
     {
 	return NULL;
     }
-    tree -> state = state;
-    tree -> moves = moves;
+    tree -> state = strdup(state);
+    tree -> moves = strdup(moves);
     tree -> left = NULL;
     tree -> right = NULL;
     return tree;
@@ -261,9 +261,9 @@ void MoveTree_destroy(MoveTree * node)
     }
     MoveTree_destroy (node -> left);
     MoveTree_destroy (node -> right);
-    free(state);
-    free(moves);
-    free(state);
+    free(node -> state);
+    free(node -> moves);
+    free(node);
 }
 
 /**
@@ -282,7 +282,7 @@ MoveTree * MoveTree_insert(MoveTree * node, const char * state,
 	return MoveTree_create(state,moves);
     }
     
-    comp = strcmp(state,node->state)
+    comp = strcmp(state,node->state);
     if(comp < 0)
     {
 	node -> left = MoveTree_insert(node->left,state,moves);
@@ -311,14 +311,14 @@ MoveTree * MoveTree_find(MoveTree * node, const char * state)
 	return NULL;
     }
     
-    comp = strcmp(state,node->state)
+    comp = strcmp(state,node->state);
     if(comp < 0)
     {
-	return MoveTree_find(node->right,state);
+	return MoveTree_find(node->left,state);
     }
     else if(comp > 0)
     {
-	return MoveTree_find(node->left,state);
+	return MoveTree_find(node->right,state);
     }
     
     return node;
@@ -385,9 +385,45 @@ void MoveTree_print(MoveTree * node)
  * This is the most complex function to write... make sure you break
  * it down, and TEST EACH PART.
  */
+void generateAllHelper(MoveTree *root, int n_moves, const char * state, char * movelist, int ind)
+{
+    int i;
+    char *m = "UDLR";
+    char mov;
+    char * dup_state;
+    int len = strlen(m);
+    
+    // Base case
+    if(ind == n_moves)
+    {
+	return;
+    }
+    //Recursive Case
+    for(i=0;i<len;i++)
+    {
+	mov = m[i];
+	dup_state = strdup(state);
+	
+	if(move(dup_state,mov))
+	{
+	    movelist[ind] = mov;
+	    movelist[ind+1] = '\0';
+	    root = MoveTree_insert(root,dup_state,movelist);
+	    generateAllHelper(root,n_moves,dup_state,movelist,ind+1);
+	}
+	
+	free(dup_state);
+    }
+}
+
 MoveTree * generateAll(char * state, int n_moves)
-{ 
-    return NULL;
+{
+    char * movelist = malloc(sizeof(char)*(n_moves+1));
+    movelist[n_moves] = '\0';
+    MoveTree * tree = MoveTree_create(state, movelist);
+    generateAllHelper(tree,n_moves,state,movelist,0);
+    free(movelist);
+    return tree;
 }
 
 /**
@@ -399,6 +435,15 @@ MoveTree * generateAll(char * state, int n_moves)
  */
 char * solve(char * state)
 {
-    return NULL;
+    MoveTree * tree = generateAll(state,MAX_SEARCH_DEPTH);
+    MoveTree * find = MoveTree_find(tree,FINAL_STATE);
+    char * movelist = NULL;
+    if(find != NULL)
+    {
+	movelist = strdup(find -> moves);
+    }
+    MoveTree_destroy(tree);
+    return movelist;
 }
 
+//valgrind --tool=memcheck --leak-check=full --verbose --log-file=outputs/val1 ./pa11 3 16249538A-7CDEBF outputs/output1 >/dev/null

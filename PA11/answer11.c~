@@ -223,8 +223,12 @@ void processMoveList(char * state, const char * movelist)
 	if(!(move(state,movelist[i])))
 	{
 	    flag = FALSE;
-	    printf("I\n");
+	    
 	}
+    }
+    if(flag == FALSE)
+    {
+	printf("I\n");
     }
     if(flag == TRUE)
     {
@@ -419,7 +423,12 @@ void generateAllHelper(MoveTree *root, int n_moves, const char * state, char * m
 
 MoveTree * generateAll(char * state, int n_moves)
 {
-    char * movelist = malloc(sizeof(char)*(n_moves+1));
+    int i;
+    char * movelist = malloc(sizeof(char)*(n_moves+1)); 
+    for(i=0;i<n_moves;i++)
+    {
+	movelist[i] = 0;
+    }
     movelist[n_moves] = '\0';
     MoveTree * tree = MoveTree_create(state, movelist);
     generateAllHelper(tree,n_moves,state,movelist,0);

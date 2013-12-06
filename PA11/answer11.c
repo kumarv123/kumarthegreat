@@ -50,7 +50,7 @@ int main(int argc, char * * argv)
  * (2) Sort the characters in your buffer. (Use qsort.)
  * (3) Check that buffer is equal to "-123456789ABCDEF"
  */
-void compst(const char *p1,const char *p2)
+int compst(const void *p1,const void *p2)
 {
     return *((char*)p1) - *((char*)p2);
 }
@@ -68,14 +68,14 @@ int isValidState(const char * state)
 	qsort(buff,len,sizeof(char),compst); // THis sorts the character in buff variable
 	if(strcmp(equ,buff) == 0) // Checks that if buff is equal to "-123456789ABCDEF"
 	{
-	    return 1;
+	    return TRUE;
 	}
 	else
 	{
-	    return 0;
+	    return FALSE;
 	}
     }
-    return 0;
+    return FALSE;
 }
 
 /** 
@@ -86,7 +86,18 @@ int isValidState(const char * state)
  */ 
 int isValidMoveList(const char * moves)
 {
-    return 0;
+    int len;
+    int i;
+    
+    len = strlen(moves); // This function checks the length of the string
+    for(i=0;i<len;i++)
+    {
+	if(moves[i] != 'R' && moves[i] != 'L' && moves[i] != 'U' && moves[i] != 'D') // Checks if character in 'moves' are in "RLUD"
+	{
+	    return FALSE;
+	}
+    }
+    return TRUE;
 }
 
 /**

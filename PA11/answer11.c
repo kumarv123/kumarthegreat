@@ -390,7 +390,7 @@ void generateAllHelper(MoveTree *root, int n_moves, const char * state, char * m
     int i;
     char *m = "UDLR";
     char mov;
-    char * dup_state;
+    char *dup_state;
     int len = strlen(m);
     
     // Base case
@@ -403,7 +403,7 @@ void generateAllHelper(MoveTree *root, int n_moves, const char * state, char * m
     {
 	mov = m[i];
 	dup_state = strdup(state);
-	
+	strcpy(dup_state,state);
 	if(move(dup_state,mov))
 	{
 	    movelist[ind] = mov;
@@ -414,6 +414,7 @@ void generateAllHelper(MoveTree *root, int n_moves, const char * state, char * m
 	
 	free(dup_state);
     }
+    //free(dup_state);
 }
 
 MoveTree * generateAll(char * state, int n_moves)
